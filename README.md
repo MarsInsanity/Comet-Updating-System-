@@ -1,7 +1,5 @@
 # Comet-Updating-System
 
-This product was developed by Supercomet Design and Technology Team
-
 Designed by: N4ri
 
 Resources used:
