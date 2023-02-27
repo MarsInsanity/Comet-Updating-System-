@@ -62,8 +62,8 @@ namespace Comet_Updating_System__彗星更新系统_
         string Brand = "Comet";
         string Program = "Comet 3";
         string RenamedProgram = "Comet";
-        string Distributor = "cometrbx.xyz";
-        string BootstrapperVersion = "3.0";
+        string Distributor = "wearedevs.net";
+        string BootstrapperVersion = "3.1.1";
         string GithubLink = "https://github.com/MarsQQ/Comet-Updating-System-/tree/master";
         string EULALink = "https://cometrbx.xyz/external-files/EULA";
 
@@ -151,29 +151,6 @@ namespace Comet_Updating_System__彗星更新系统_
 
         #endregion
 
-        #region Json Strings for Themer
-
-        bool HadThemeAlready = false;
-
-        string ThemeManufacturer = "超级彗星技术";
-        string Color1 = "#FF0080FF";
-        string Color2 = "#FF50E7FF";
-        string TextboxImage = "";
-
-        public class jsonstrings
-        {
-            public List<jsonstrings.ThemeSystem> Theme;
-            public class ThemeSystem
-            {
-                public string ThemeManufacturer { get; set; }
-                public string Color1 { get; set; }
-                public string Color2 { get; set; }
-                public string TextboxImage { get; set; }
-            }
-        }
-
-        #endregion
-
         #region Loading Updater
 
         public Updater()
@@ -223,9 +200,9 @@ namespace Comet_Updating_System__彗星更新系统_
 
             try 
             {
-                if (File.Exists("Comet 3\\bin\\theme.comet"))
+                if (File.Exists("Comet 3\\data\\theme.comet"))
                 {
-                    dynamic CometTheme = JsonConvert.DeserializeObject(System.IO.File.ReadAllText("Comet 3\\bin\\theme.comet"));
+                    dynamic CometTheme = JsonConvert.DeserializeObject(System.IO.File.ReadAllText("Comet 3\\data\\theme.comet"));
 
                     ThemeManufacturer = CometTheme.Theme[0].ThemeManufacturer.ToString();
                     Color1 = CometTheme.Theme[0].Color1.ToString();
@@ -386,27 +363,6 @@ namespace Comet_Updating_System__彗星更新系统_
             ChangeProgress("Excluding " + Program + " DLL file.", 90);
             if (ExcludeCometFolders == true)
                 ExcludeComet(@"C:\Users\" + Environment.UserName + @"\AppData\Local\" + HWID());
-
-            #region Recreating Theme File
-
-            jsonstrings data = new jsonstrings
-            {
-                Theme = new List<jsonstrings.ThemeSystem>
-                    {
-                        new jsonstrings.ThemeSystem
-                        {
-                            ThemeManufacturer = ThemeManufacturer,
-                            Color1 = Color1,
-                            Color2 = Color2,
-                            TextboxImage = TextboxImage
-                        },
-                    }
-            };
-
-            try { File.WriteAllText(Program + "\\bin\\theme.comet", JsonConvert.SerializeObject(data, Formatting.Indented)); }
-            catch { }
-
-            #endregion
 
             ChangeProgress("Done installing " + Program + "!", 100);
 
