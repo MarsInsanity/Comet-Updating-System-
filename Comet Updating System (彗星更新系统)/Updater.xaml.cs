@@ -30,6 +30,20 @@ namespace Comet_Updating_System__彗星更新系统_
     /// </summary>
     public partial class Updater : Window
     {
+        #region Updater Settings
+
+        string Brand = "Comet";
+        string Program = "Comet 3";
+        string RenamedProgram = "Comet";
+        string Distributor = "wearedevs.net";
+        string BootstrapperVersion = "3.1.1";
+        string GithubLink = "https://github.com/MarsQQ/Comet-Updating-System-/tree/master";
+        string EULALink = "https://cometrbx.xyz/external-files/EULA";
+
+        bool ExcludeCometFolders = false;
+
+        #endregion
+
         #region General Pre-Requisites
 
         [DllImport("Comet 3\\bin\\CometAuth.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl, EntryPoint = "Verify")]
@@ -56,21 +70,6 @@ namespace Comet_Updating_System__彗星更新系统_
         }
 
         #endregion
-
-        #region Updater Settings
-
-        string Brand = "Comet";
-        string Program = "Comet 3";
-        string RenamedProgram = "Comet";
-        string Distributor = "wearedevs.net";
-        string BootstrapperVersion = "3.1.1";
-        string GithubLink = "https://github.com/MarsQQ/Comet-Updating-System-/tree/master";
-        string EULALink = "https://cometrbx.xyz/external-files/EULA";
-
-        bool ExcludeCometFolders = false;
-
-        #endregion
-
         #region Animation Pre-Requisites
 
         Storyboard StoryBoard = new Storyboard();
@@ -200,17 +199,12 @@ namespace Comet_Updating_System__彗星更新系统_
 
             try 
             {
-                if (File.Exists("Comet 3\\data\\theme.comet"))
+                if (File.Exists(Program + "\\data\\theme.comet"))
                 {
-                    dynamic CometTheme = JsonConvert.DeserializeObject(System.IO.File.ReadAllText("Comet 3\\data\\theme.comet"));
+                    dynamic CometTheme = JsonConvert.DeserializeObject(System.IO.File.ReadAllText(Program + "\\data\\theme.comet"));
 
-                    ThemeManufacturer = CometTheme.Theme[0].ThemeManufacturer.ToString();
-                    Color1 = CometTheme.Theme[0].Color1.ToString();
-                    Color2 = CometTheme.Theme[0].Color2.ToString();
-                    TextboxImage = CometTheme.Theme[0].TextboxImage.ToString();
-
-                    BSG1.Color = (Color)ColorConverter.ConvertFromString(Color1);
-                    BSG2.Color = (Color)ColorConverter.ConvertFromString(Color2);
+                    BSG1.Color = (Color)ColorConverter.ConvertFromString(CometTheme.Theme[0].Color1.ToString());
+                    BSG2.Color = (Color)ColorConverter.ConvertFromString(CometTheme.Theme[0].Color2.ToString());
                 }
             } catch { }
 
