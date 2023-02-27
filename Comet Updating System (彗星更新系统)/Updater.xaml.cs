@@ -62,7 +62,7 @@ namespace Comet_Updating_System__彗星更新系统_
         string Brand = "Comet";
         string Program = "Comet 3";
         string RenamedProgram = "Comet";
-        string Distributor = "wearedevs.net";
+        string Distributor = "cometrbx.xyz";
         string BootstrapperVersion = "3.0";
         string GithubLink = "https://github.com/MarsQQ/Comet-Updating-System-/tree/master";
         string EULALink = "https://cometrbx.xyz/external-files/EULA";
@@ -151,11 +151,35 @@ namespace Comet_Updating_System__彗星更新系统_
 
         #endregion
 
+        #region Json Strings for Themer
+
+        bool HadThemeAlready = false;
+
+        string ThemeManufacturer = "超级彗星技术";
+        string Color1 = "#FF0080FF";
+        string Color2 = "#FF50E7FF";
+        string TextboxImage = "";
+
+        public class jsonstrings
+        {
+            public List<jsonstrings.ThemeSystem> Theme;
+            public class ThemeSystem
+            {
+                public string ThemeManufacturer { get; set; }
+                public string Color1 { get; set; }
+                public string Color2 { get; set; }
+                public string TextboxImage { get; set; }
+            }
+        }
+
+        #endregion
+
         #region Loading Updater
 
         public Updater()
         {
             InitializeComponent();
+
             #region RGBSpinner
 
             RGBTime = new DispatcherTimer(TimeSpan.FromMilliseconds(10), DispatcherPriority.Normal, delegate
@@ -165,6 +189,7 @@ namespace Comet_Updating_System__彗星更新系统_
             RGBTime.Start();
 
             #endregion
+            #region Set Logo Starting Positions
 
             LogoGrid.Opacity = 0;
             I1.Margin = new Thickness(50, -50, -50, 50);
@@ -173,6 +198,9 @@ namespace Comet_Updating_System__彗星更新系统_
             LogoGrid2.Opacity = 0;
             II1.Margin = new Thickness(50, -50, -50, 50);
             II3.Margin = new Thickness(-50, 50, 50, -50);
+
+            #endregion
+            #region Check Distributor
 
             string verifieddistributor = HttpGet("https://cometrbx.xyz/external-files/verifieddistributorlist.txt");
             string DistributorName = Distributor;
@@ -190,6 +218,24 @@ namespace Comet_Updating_System__彗星更新系统_
                 Process.Start("https://" + DistributorName);
                 System.Diagnostics.Process.GetCurrentProcess().Kill();
             }
+
+            #endregion
+
+            try 
+            {
+                if (File.Exists("Comet 3\\bin\\theme.comet"))
+                {
+                    dynamic CometTheme = JsonConvert.DeserializeObject(System.IO.File.ReadAllText("Comet 3\\bin\\theme.comet"));
+
+                    ThemeManufacturer = CometTheme.Theme[0].ThemeManufacturer.ToString();
+                    Color1 = CometTheme.Theme[0].Color1.ToString();
+                    Color2 = CometTheme.Theme[0].Color2.ToString();
+                    TextboxImage = CometTheme.Theme[0].TextboxImage.ToString();
+
+                    BSG1.Color = (Color)ColorConverter.ConvertFromString(Color1);
+                    BSG2.Color = (Color)ColorConverter.ConvertFromString(Color2);
+                }
+            } catch { }
 
             EULAParagraph.Text = HttpGet(EULALink);
         }
@@ -278,20 +324,26 @@ namespace Comet_Updating_System__彗星更新系统_
 
             ChangeProgress("Adding AutoExec & Workspace Folder.", 10);
 
-            string[] Directories = { Program + "\\autoexec", Program + "\\workspace" };
+            string[] Directories = { Program + "\\autoexec", Program + "\\workspace", Program + "\\data\\savedtextbox", Program + "\\scripts\\favoritescripts"};
             for (int i = 0; i < Directories.Length; ++i)
                 Directory.CreateDirectory(Directories[i]);
 
             ChangeProgress("Excluding " + Brand + " Folder.", 20);
             if (ExcludeCometFolders == true)
+            {
+                // Reference:
+                // https://stackoverflow.com/questions/980202/how-do-i-find-the-current-executable-filename
+                ExcludeComet(System.Reflection.Assembly.GetEntryAssembly().Location);
                 ExcludeComet(Directory.GetCurrentDirectory() + "\\" + Program);
+            }
 
             if (Directory.Exists(Program))
             {
                 ChangeProgress("Adding Scripts into Scripts Folder.", 30);
-                if (!Directory.Exists(Program + "\\scripts"))
+                if (System.IO.Directory.GetFiles(Program + "\\scripts").Length == 0)
                 {
-                    Directory.CreateDirectory(Program + "\\scripts");
+                    // Reference:
+                    // https://social.msdn.microsoft.com/Forums/vstudio/en-US/2239b45a-3f19-4a2a-b5cd-050b3ee32b9d/how-can-i-check-folder-is-empty-or-not?forum=csharpgeneral
                     webClient.DownloadFileAsync(new Uri("https://cometrbx.xyz/external-files/scripts.zip"), Program + "\\scripts\\scripts.zip");
                     while (webClient.IsBusy)
                         await Task.Delay(1000);
@@ -335,6 +387,27 @@ namespace Comet_Updating_System__彗星更新系统_
             if (ExcludeCometFolders == true)
                 ExcludeComet(@"C:\Users\" + Environment.UserName + @"\AppData\Local\" + HWID());
 
+            #region Recreating Theme File
+
+            jsonstrings data = new jsonstrings
+            {
+                Theme = new List<jsonstrings.ThemeSystem>
+                    {
+                        new jsonstrings.ThemeSystem
+                        {
+                            ThemeManufacturer = ThemeManufacturer,
+                            Color1 = Color1,
+                            Color2 = Color2,
+                            TextboxImage = TextboxImage
+                        },
+                    }
+            };
+
+            try { File.WriteAllText(Program + "\\bin\\theme.comet", JsonConvert.SerializeObject(data, Formatting.Indented)); }
+            catch { }
+
+            #endregion
+
             ChangeProgress("Done installing " + Program + "!", 100);
 
             await Task.Delay(1000);
@@ -343,7 +416,6 @@ namespace Comet_Updating_System__彗星更新系统_
             ObjectShift(TimeSpan.FromMilliseconds(1000), WelcomeGrid, WelcomeGrid.Margin, new Thickness(0, 40, 0, 0));
         }
         #endregion
-
         #region Window Controls
 
         private void ExitB_Click(object sender, RoutedEventArgs e) => Application.Current.Shutdown();
