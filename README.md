@@ -11,4 +11,4 @@ Resources used:
 - Exclusion Code, Opening Comet Code, that weird HttpGet function, CometAuth: Showerhead
 - Extraction Code: https://learn.microsoft.com/en-us/dotnet/api/system.io.compression.zipfile.extracttodirectory?view=net-7.0
 - DownloadFile Code: https://www.youtube.com/watch?v=AzwLQKWY8ZM
-- ProgressBar Code: MCGamin1738 (Somebody I used to know)
+- ProgressBar Code: MCGamin1738
