@@ -35,7 +35,7 @@ namespace Comet_Updating_System__彗星更新系统_
         string Brand = "Comet";
         string Program = "Comet 3";
         string RenamedProgram = "Comet";
-        string Distributor = "wearedevs.net";
+        string Distributor = "cometrbx.xyz";
         string BootstrapperVersion = "3.1.1";
         string GithubLink = "https://github.com/MarsQQ/Comet-Updating-System-/tree/master";
         string EULALink = "https://cometrbx.xyz/external-files/EULA";
@@ -45,10 +45,6 @@ namespace Comet_Updating_System__彗星更新系统_
         #endregion
 
         #region General Pre-Requisites
-
-        [DllImport("Comet 3\\bin\\CometAuth.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl, EntryPoint = "Verify")]
-        [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool Verify([MarshalAs(UnmanagedType.LPStr)] string key);
 
         [DllImport("Comet 3\\bin\\CometAuth.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "HWID")]
         [return: MarshalAs(UnmanagedType.BStr)]
